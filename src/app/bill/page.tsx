@@ -1,12 +1,10 @@
+import BillPageContent from './BillPageContent';
 
-import BillPageContent from './BillPageContent'; // adjust path if needed
-
-
-export default function Page({
-  searchParams,
-}: {
+interface PageProps {
   searchParams?: { orderId?: string };
-}) {
- 
+}
+
+export default function Page({ searchParams }: PageProps) {
+  // Pass the orderId as a string or undefined
   return <BillPageContent orderId={searchParams?.orderId} />;
 }

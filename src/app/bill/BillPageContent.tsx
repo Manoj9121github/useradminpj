@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 
 interface CartItem {
@@ -15,11 +14,8 @@ interface Order {
   orderDate: string;
 }
 
-export default function BillPageContent({
-  orderId,
-}: {
-  orderId?: string;
-}) {
+// ✅ Accept orderId as prop (string | undefined)
+export default function BillPageContent({ orderId }: { orderId?: string }) {
   const [order, setOrder] = useState<Order | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,11 +33,8 @@ export default function BillPageContent({
       });
   }, [orderId]);
 
-  if (error)
-    return <p className="text-center mt-6 text-red-500">{error}</p>;
-
-  if (!order)
-    return <p className="text-center mt-6">Loading bill...</p>;
+  if (error) return <p className="text-center mt-6 text-red-500">{error}</p>;
+  if (!order) return <p className="text-center mt-6">Loading bill...</p>;
 
   const subtotal = (order.items ?? []).reduce(
     (acc, i) => acc + i.price * i.selectedQty,
