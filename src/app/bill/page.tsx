@@ -1,10 +1,6 @@
 import BillPageContent from './BillPageContent';
 
-interface PageProps {
-  searchParams?: { orderId?: string };
-}
-
-export default function Page({ searchParams }: PageProps) {
-  // Pass the orderId as a string or undefined
+export default function Page({ searchParams }: { searchParams: { orderId?: string } }) {
+  // directly pass searchParams.orderId to client component
   return <BillPageContent orderId={searchParams?.orderId} />;
 }

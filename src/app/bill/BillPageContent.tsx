@@ -14,13 +14,13 @@ interface Order {
   orderDate: string;
 }
 
-// ✅ Accept orderId as prop (string | undefined)
 export default function BillPageContent({ orderId }: { orderId?: string }) {
   const [order, setOrder] = useState<Order | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!orderId) return;
+
     fetch(`/api/addOrder?orderId=${orderId}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch order');
