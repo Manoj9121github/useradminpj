@@ -8,13 +8,18 @@ interface CartItem {
   price: number;
   selectedQty: number;
 }
+
 interface Order {
   orderId: number;
   items: CartItem[];
   orderDate: string;
 }
 
-export default function BillPageContent({ orderId }: { orderId?: string }) {
+export default function BillPageContent({
+  orderId,
+}: {
+  orderId?: string;
+}) {
   const [order, setOrder] = useState<Order | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,11 +31,17 @@ export default function BillPageContent({ orderId }: { orderId?: string }) {
         return res.json();
       })
       .then((data) => setOrder(data))
-      .catch(() => setError('Could not load order.'));
+      .catch((err) => {
+        console.error(err);
+        setError('Could not load order.');
+      });
   }, [orderId]);
 
-  if (error) return <p className="text-center mt-6 text-red-500">{error}</p>;
-  if (!order) return <p className="text-center mt-6">Loading bill...</p>;
+  if (error)
+    return <p className="text-center mt-6 text-red-500">{error}</p>;
+
+  if (!order)
+    return <p className="text-center mt-6">Loading bill...</p>;
 
   const subtotal = (order.items ?? []).reduce(
     (acc, i) => acc + i.price * i.selectedQty,
