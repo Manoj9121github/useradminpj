@@ -1,14 +1,21 @@
 "use client";
 import { useState } from "react";
 
+interface FormState {
+  name: string;
+  category: string;
+  price: string;
+  quantity: string;
+}
+
 export default function AdminPage() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<FormState>({
     name: "",
     category: "",
     price: "",
     quantity: "",
   });
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState<string>("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -20,9 +27,13 @@ export default function AdminPage() {
         body: JSON.stringify(form),
       });
       const data = await res.json();
-      if (data.success) setMsg("✅ Added: " + data.product.name);
-      else setMsg("❌ " + (data.error ?? "Unknown error"));
-    } catch (err) {
+
+      if (data.success && data.product?.name) {
+        setMsg("✅ Added: " + data.product.name);
+      } else {
+        setMsg("❌ " + (data.error ?? "Unknown error"));
+      }
+    } catch (err: unknown) {
       setMsg("❌ Network error");
     }
   }

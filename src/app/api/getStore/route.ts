@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 
-// Define the Product type
 interface Product {
   id: number;
   name: string;
@@ -11,10 +10,8 @@ interface Product {
   image?: string;
 }
 
-// Type for the JSON file structure
 interface StoreFile {
   products: Product[];
-  orders?: any[]; // Orders can stay as any[] if structure varies
 }
 
 export async function GET() {
