@@ -15,7 +15,7 @@ export default function AdminPage() {
     price: "",
     quantity: "",
   });
-  const [msg, setMsg] = useState<string>("");
+  const [msg, setMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,7 +33,8 @@ export default function AdminPage() {
       } else {
         setMsg("❌ " + (data.error ?? "Unknown error"));
       }
-    } catch (err: unknown) {
+    } catch (err) {
+      console.error(err);
       setMsg("❌ Network error");
     }
   }

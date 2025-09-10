@@ -8,14 +8,13 @@ interface CartItem {
   price: number;
   selectedQty: number;
 }
-
 interface Order {
   orderId: number;
   items: CartItem[];
   orderDate: string;
 }
 
-export default function BillPage() {
+export default function BillPageContent() {
   const searchParams = useSearchParams();
   const orderId = Number(searchParams.get("orderId"));
   const [order, setOrder] = useState<Order | null>(null);
@@ -28,7 +27,8 @@ export default function BillPage() {
       .catch((err) => console.error(err));
   }, [orderId]);
 
-  if (!order) return <p className="text-center mt-6">Loading bill...</p>;
+  if (!order)
+    return <p className="text-center mt-6">Loading bill...</p>;
 
   const subtotal = order.items.reduce(
     (acc, i) => acc + i.price * i.selectedQty,
