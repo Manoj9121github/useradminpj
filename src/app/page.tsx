@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
@@ -11,7 +13,7 @@ export default function Home() {
           href="/user"
           className="flex flex-col items-center p-6 bg-white shadow-lg rounded-xl transform hover:scale-105 transition duration-300 w-48"
         >
-          <img
+          <Image width={'100'} height={'100'}
             src="/images/user.png" // put a user icon in public/user.png
             alt="User"
             className="w-20 h-20 mb-4"
@@ -24,7 +26,7 @@ export default function Home() {
           href="/admin"
           className="flex flex-col items-center p-6 bg-white shadow-lg rounded-xl transform hover:scale-105 transition duration-300 w-48"
         >
-          <img
+          <Image  width={'100'} height={'100'}
             src="/images/admin.jpg" // put an admin icon in public/admin.png
             alt="Admin"
             className="w-20 h-20 mb-4"

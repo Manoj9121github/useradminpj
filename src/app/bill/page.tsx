@@ -1,6 +1,7 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 interface CartItem {
   id: number;
@@ -16,21 +17,32 @@ interface Order {
 
 export default function BillPageContent() {
   const searchParams = useSearchParams();
-  const orderId = Number(searchParams.get("orderId"));
+  const orderId = Number(searchParams.get('orderId'));
   const [order, setOrder] = useState<Order | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!orderId) return;
     fetch(`/api/addOrder?orderId=${orderId}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch order');
+        return res.json();
+      })
       .then((data) => setOrder(data))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setError('Could not load order.');
+      });
   }, [orderId]);
+
+  if (error)
+    return <p className="text-center mt-6 text-red-500">{error}</p>;
 
   if (!order)
     return <p className="text-center mt-6">Loading bill...</p>;
 
-  const subtotal = order.items.reduce(
+  // ✅ safe reduce
+  const subtotal = (order.items ?? []).reduce(
     (acc, i) => acc + i.price * i.selectedQty,
     0
   );
@@ -43,7 +55,7 @@ export default function BillPageContent() {
         Bill - Order #{order.orderId}
       </h2>
       <ul className="mb-4 space-y-2">
-        {order.items.map((item) => (
+        {order.items?.map((item) => (
           <li key={item.id} className="flex justify-between">
             <span>
               {item.name} × {item.selectedQty}

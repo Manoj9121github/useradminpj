@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Product {
   id: number;
@@ -34,7 +35,7 @@ export default function UserPage() {
           >
             <div className="flex flex-col items-center">
               {p.image && (
-                <img
+                <Image width={'100'} height={'100'} 
                   src={p.image}
                   alt={p.name}
                   className="w-full h-48 object-contain mb-3 rounded"
