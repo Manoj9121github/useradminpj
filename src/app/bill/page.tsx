@@ -23,24 +23,31 @@ export default function BillPage() {
   useEffect(() => {
     if (!orderId) return;
     fetch(`/api/addOrder?orderId=${orderId}`)
-      .then(res => res.json())
-      .then(data => setOrder(data))
-      .catch(err => console.error(err));
+      .then((res) => res.json())
+      .then((data) => setOrder(data))
+      .catch((err) => console.error(err));
   }, [orderId]);
 
   if (!order) return <p className="text-center mt-6">Loading bill...</p>;
 
-  const subtotal = order.items.reduce((acc, i) => acc + i.price * i.selectedQty, 0);
+  const subtotal = order.items.reduce(
+    (acc, i) => acc + i.price * i.selectedQty,
+    0
+  );
   const tax = subtotal * 0.18;
   const total = subtotal + tax;
 
   return (
     <div className="p-6 max-w-md mx-auto border rounded shadow bg-white mt-6">
-      <h2 className="text-2xl font-bold mb-4 text-center">Bill - Order #{order.orderId}</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center">
+        Bill - Order #{order.orderId}
+      </h2>
       <ul className="mb-4 space-y-2">
-        {order.items.map(item => (
+        {order.items.map((item) => (
           <li key={item.id} className="flex justify-between">
-            <span>{item.name} × {item.selectedQty}</span>
+            <span>
+              {item.name} × {item.selectedQty}
+            </span>
             <span>₹{item.price * item.selectedQty}</span>
           </li>
         ))}
