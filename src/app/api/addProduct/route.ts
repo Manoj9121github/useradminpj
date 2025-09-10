@@ -5,11 +5,26 @@ const FILE_PATH = process.env.GITHUB_FILE!;
 const TOKEN = process.env.GITHUB_TOKEN!;
 const BRANCH = process.env.GITHUB_BRANCH ?? "main";
 
+// Type for the JSON file structure
+interface Product {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+  quantity: number;
+  date: string;
+}
+
+interface StoreFile {
+  products: Product[];
+  orders: any[]; // Keep as any[] if orders structure varies
+}
+
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const body: { name: string; category: string; price: number | string; quantity: number | string } = await req.json();
 
-    const newProduct = {
+    const newProduct: Product = {
       id: Date.now(),
       name: body.name,
       category: body.category,
@@ -18,27 +33,30 @@ export async function POST(req: Request) {
       date: new Date().toISOString().slice(0, 10),
     };
 
-    // 1. Fetch current file
-    const fileRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}?ref=${BRANCH}`, {
-      headers: { Authorization: `Bearer ${TOKEN}`, Accept: "application/vnd.github.v3+json" },
-    });
+    // 1. Fetch current file from GitHub
+    const fileRes = await fetch(
+      `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}?ref=${BRANCH}`,
+      {
+        headers: { Authorization: `Bearer ${TOKEN}`, Accept: "application/vnd.github.v3+json" },
+      }
+    );
 
     if (!fileRes.ok) {
       const txt = await fileRes.text();
       throw new Error(`GitHub GET failed: ${fileRes.status} — ${txt}`);
     }
 
-    const file = await fileRes.json();
+    const fileJson: { content: string; sha: string } = await fileRes.json();
 
     // 2. Decode content
-    const decoded = Buffer.from(file.content, "base64").toString("utf8");
-    let doc = JSON.parse(decoded);
+    const decoded = Buffer.from(fileJson.content, "base64").toString("utf8");
+    const doc: StoreFile = JSON.parse(decoded);
 
-    // ensure proper structure
+    // Ensure proper structure
     if (!doc.products) doc.products = [];
     if (!doc.orders) doc.orders = [];
 
-    // 3. Add product
+    // 3. Add new product
     doc.products.push(newProduct);
 
     // 4. Encode and PUT back
@@ -49,7 +67,7 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         message: `Add product ${newProduct.name}`,
         content: updatedContent,
-        sha: file.sha,
+        sha: fileJson.sha,
         branch: BRANCH,
       }),
     });
@@ -60,8 +78,9 @@ export async function POST(req: Request) {
     if (!putRes.ok) throw new Error(`GitHub PUT failed`);
 
     return NextResponse.json({ success: true, product: newProduct });
-  } catch (err: any) {
-    console.error("addProduct error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("addProduct error:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

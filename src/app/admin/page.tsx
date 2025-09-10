@@ -2,10 +2,15 @@
 import { useState } from "react";
 
 export default function AdminPage() {
-  const [form, setForm] = useState({ name: "", category: "", price: "", quantity: "" });
+  const [form, setForm] = useState({
+    name: "",
+    category: "",
+    price: "",
+    quantity: "",
+  });
   const [msg, setMsg] = useState("");
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setMsg("Adding...");
     try {
@@ -23,44 +28,46 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold mb-6 text-center text-blue-700">Add New Product</h2>
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-xl p-10 w-full max-w-lg hover:scale-105 transform transition duration-300">
+        <h2 className="text-4xl font-extrabold mb-6 text-center text-blue-700">
+          Add New Product
+        </h2>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <input
-            className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             placeholder="Product Name"
             value={form.name}
-            onChange={e => setForm({ ...form, name: e.target.value })}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
 
           <input
-            className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             placeholder="Category"
             value={form.category}
-            onChange={e => setForm({ ...form, category: e.target.value })}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
           />
 
           <input
             type="number"
-            className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             placeholder="Price"
             value={form.price}
-            onChange={e => setForm({ ...form, price: e.target.value })}
+            onChange={(e) => setForm({ ...form, price: e.target.value })}
           />
 
           <input
             type="number"
-            className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             placeholder="Quantity"
             value={form.quantity}
-            onChange={e => setForm({ ...form, quantity: e.target.value })}
+            onChange={(e) => setForm({ ...form, quantity: e.target.value })}
           />
 
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-md transition duration-300"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg hover:shadow-xl transition duration-300"
           >
             Add Product
           </button>
@@ -68,7 +75,7 @@ export default function AdminPage() {
 
         {msg && (
           <p
-            className={`mt-4 text-center font-medium ${
+            className={`mt-5 text-center font-medium ${
               msg.includes("✅") ? "text-green-600" : "text-red-600"
             }`}
           >
@@ -79,4 +86,3 @@ export default function AdminPage() {
     </div>
   );
 }
-  
