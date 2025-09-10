@@ -42,9 +42,11 @@ export default function PaymentPage() {
       <h2 className="text-2xl font-bold mb-4 text-center">Payment</h2>
 
       <ul className="mb-4 space-y-2">
-        {cart.map(item => (
+        {cart.map((item) => (
           <li key={item.id} className="flex justify-between">
-            <span>{item.name} × {item.selectedQty}</span>
+            <span>
+              {item.name} × {item.selectedQty}
+            </span>
             <span>₹{(item.price * item.selectedQty).toLocaleString()}</span>
           </li>
         ))}
@@ -53,9 +55,15 @@ export default function PaymentPage() {
       <hr className="my-2" />
 
       <div className="space-y-1 text-gray-700">
-        <div className="flex justify-between"><span>Subtotal:</span> <span>₹{subtotal.toFixed(2)}</span></div>
-        <div className="flex justify-between"><span>Tax (18%):</span> <span>₹{tax.toFixed(2)}</span></div>
-        <div className="flex justify-between font-bold text-lg mt-1"><span>Total:</span> <span>₹{total.toFixed(2)}</span></div>
+        <div className="flex justify-between">
+          <span>Subtotal:</span> <span>₹{subtotal.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>Tax (18%):</span> <span>₹{tax.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between font-bold text-lg mt-1">
+          <span>Total:</span> <span>₹{total.toFixed(2)}</span>
+        </div>
       </div>
 
       <button
