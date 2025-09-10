@@ -1,11 +1,6 @@
 import BillPageContent from './BillPageContent';
 
-// Mark the Page component as async to handle the Promise-based searchParams
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: { orderId?: string };
-}) {
-  const orderId = searchParams?.orderId;
-  return <BillPageContent orderId={orderId} />;
+export default function Page({ searchParams }: any) {
+  // Pass orderId to client component
+  return <BillPageContent orderId={searchParams?.orderId} />;
 }
